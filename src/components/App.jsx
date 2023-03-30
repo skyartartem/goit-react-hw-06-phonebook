@@ -3,6 +3,9 @@ import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
+import { useSelector, useDispatch } from 'react-redux';
+import {add, remove} from '../redux/contactsSlice'
+import { change, reset } from '../redux/filterSlice';
 import css from './App.module.css';
 
 const CONTACTS = 'contacts';
@@ -60,8 +63,22 @@ export const App = () => {
     setContacts( filtred );
   };
 
+
+  const conts = useSelector(state => state.contacts)
+  const q = useSelector(state=> state.filter)
+  const dispatch = useDispatch();
+
+  const ipt = evt => dispatch(change(evt.target.value));
+
+  // console.dir(change);
   return (
     <div className={css.conteiner}>
+      <span>{conts.join(',')}</span>
+      <button onClick={() => dispatch(add(1))}>add</button>
+      <button onClick={() => dispatch(remove())}>remove</button>
+      <input onChange={ipt} value={q} type="text" />
+      <button onClick={() => dispatch(reset())}>reset</button>
+
       <h1>Phonebook</h1>
       <ContactForm addContact={addContact} />
       <h2>Contacts</h2>
